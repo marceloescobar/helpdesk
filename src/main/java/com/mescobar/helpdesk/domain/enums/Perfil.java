@@ -22,5 +22,9 @@ public enum Perfil {
 	public String getDescricao() {
 		return descricao;
 	}
+	
+	public static Perfil toEnum(Integer codigo){
+		return null;
+	}
 
 }
