@@ -1,5 +1,8 @@
 package com.mescobar.helpdesk.resource;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +20,21 @@ public class ChamadoResource {
 
 	@Autowired
 	private ChamadoService service;
-	
+
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ChamadoDTO> findById(@PathVariable Integer id){
-		
+	public ResponseEntity<ChamadoDTO> findById(@PathVariable Integer id) {
+
 		Chamado chamado = service.findById(id);
-		
+
 		return ResponseEntity.ok().body(new ChamadoDTO(chamado));
+	}
+
+	@GetMapping
+	public ResponseEntity<List<ChamadoDTO>> findAll() {
+		List<Chamado> chamados = service.findAll();
+
+		List<ChamadoDTO> chamadosDTO = chamados.stream().map(x -> new ChamadoDTO(x)).collect(Collectors.toList());
+
+		return ResponseEntity.ok().body(chamadosDTO);
 	}
 }
