@@ -1,5 +1,7 @@
 package com.mescobar.helpdesk.domain.enums;
 
+import java.util.Arrays;
+
 public enum Status {
 
 	ABERTO(0, "ABERTO"), ANDAMENTO(1, "ANDAMENTO"), ENCERRADO(2, "ENCERRADO");
@@ -18,5 +20,15 @@ public enum Status {
 
 	public String getDescricao() {
 		return descricao;
+	}
+
+	public static Status toEnum(Integer codigo) {
+		if (codigo == null) {
+			return null;
+		}
+
+		return Arrays.stream(values()).filter(o -> o.getCodigo().equals(codigo)).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Prioridade inválido"));
+
 	}
 }

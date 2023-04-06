@@ -1,5 +1,7 @@
 package com.mescobar.helpdesk.domain.enums;
 
+import java.util.Arrays;
+
 /**
  * @author marcelo_escobar
  *
@@ -22,9 +24,15 @@ public enum Perfil {
 	public String getDescricao() {
 		return descricao;
 	}
-	
-	public static Perfil toEnum(Integer codigo){
-		return null;
+
+	public static Perfil toEnum(Integer codigo) {
+		if (codigo == null) {
+			return null;
+		}
+
+		return Arrays.stream(values()).filter(o -> o.getCodigo().equals(codigo)).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Perfil inválido"));
+
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.mescobar.helpdesk.domain.enums;
 
+import java.util.Arrays;
+
 public enum Prioridade {
 
 	BAIXA(0, "BAIXA"), MEDIA(1, "MEDIA"), ALTA(2, "ALTA");
@@ -18,5 +20,15 @@ public enum Prioridade {
 
 	public String getDescricao() {
 		return descricao;
+	}
+
+	public static Prioridade toEnum(Integer codigo) {
+		if (codigo == null) {
+			return null;
+		}
+
+		return Arrays.stream(values()).filter(o -> o.getCodigo().equals(codigo)).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Prioridade inválido"));
+
 	}
 }
