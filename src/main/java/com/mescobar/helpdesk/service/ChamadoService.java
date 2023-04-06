@@ -1,5 +1,6 @@
 package com.mescobar.helpdesk.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,13 @@ public class ChamadoService {
 		return repository.save(this.criarChamado(createChamado));
 	}
 
+	public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
+		objDTO.setId(id);
+		Chamado oldObj = this.findById(id);
+		oldObj = this.criarChamado(objDTO);
+		return repository.save(oldObj);
+	}
+
 	private Chamado criarChamado(ChamadoDTO obj) {
 		Tecnico tecnico = tecnicoService.findById(obj.getTecnico());
 		Cliente cliente = clienteService.findById(obj.getCliente());
@@ -50,6 +58,10 @@ public class ChamadoService {
 		Chamado chamado = new Chamado();
 		chamado.setId(obj.getId() == null ? null : obj.getId());
 
+		if (Status.ENCERRADO.getCodigo().equals(obj.getStatus())) {
+			chamado.setDataFechamento(LocalDate.now());
+		}
+		
 		chamado.setTecnico(tecnico);
 		chamado.setCliente(cliente);
 		chamado.setPrioridade(Prioridade.toEnum(obj.getPrioridade()));
@@ -60,4 +72,5 @@ public class ChamadoService {
 		return chamado;
 
 	}
+
 }
