@@ -1,6 +1,7 @@
 package com.mescobar.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mescobar.helpdesk.domain.Chamado;
@@ -18,21 +19,25 @@ public class DBService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private TecnicoRepository tecnicoRepository;
-	
+
 	@Autowired
 	private ChamadoRepository chamadoRepository;
-	
+
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+
 	public void instanciaDB() {
-		Tecnico tsc1 = new Tecnico(null,"Valdir Cezar","97304728078","valdir@email.com","123");
+		Tecnico tsc1 = new Tecnico(null, "Valdir Cezar", "97304728078", "valdir@email.com", encoder.encode("123"));
 		tsc1.addPerfil(Perfil.ADMIN);
-		
-		Cliente cli1 = new Cliente(null,"Linus Torvalds", "72765104255","torvalds@email.com","123");
-		
-		Chamado chamado1 = new Chamado(null, Prioridade.MEDIA, Status.ANDAMENTO, "Chamado 01", "primeiro chamado", tsc1, cli1);
-		
+
+		Cliente cli1 = new Cliente(null, "Linus Torvalds", "72765104255", "torvalds@email.com", encoder.encode("123"));
+
+		Chamado chamado1 = new Chamado(null, Prioridade.MEDIA, Status.ANDAMENTO, "Chamado 01", "primeiro chamado", tsc1,
+				cli1);
+
 		tecnicoRepository.save(tsc1);
 		clienteRepository.save(cli1);
 		chamadoRepository.save(chamado1);

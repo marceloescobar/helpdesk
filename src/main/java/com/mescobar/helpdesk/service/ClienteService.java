@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mescobar.helpdesk.domain.Pessoa;
@@ -23,6 +24,9 @@ public class ClienteService {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public Cliente findById(Integer id) {
 		Optional<Cliente> obj = repository.findById(id);
@@ -34,6 +38,9 @@ public class ClienteService {
 	}
 
 	public Cliente create(ClienteDTO createClienteDTO) {
+		createClienteDTO.setId(null);
+		createClienteDTO.setSenha(encoder.encode(createClienteDTO.getSenha()));
+		
 		validaPorCpfEEmail(createClienteDTO);
 		Cliente cliente = new Cliente(createClienteDTO);
 		return repository.save(cliente);
